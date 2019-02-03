@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swagger Validation</title>
+</head>
+<body>
+    <form method="post" action="/swaggerValidation">
+        <label>
+            Swagger URL:
+            <input type="url" name="swaggerUrl"/>
+        </label>
+        <label>
+            API Path:
+            <input type="path" name="path"/>
+        </label>
+        <label>
+            Request body:
+            <input type="text" name="request"/>
+        </label>
+        <label>
+            Response body:
+            <input type="text" name="response"/>
+        </label>
+        <input type="submit" value="Validate"/>
+    </form>
+</body>
+</html>
