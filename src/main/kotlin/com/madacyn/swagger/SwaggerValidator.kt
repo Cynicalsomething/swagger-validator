@@ -20,12 +20,12 @@ fun main(args: Array<String>) {
 @RestController
 class HelloController {
 
-    @GetMapping("/hello")
+    @GetMapping("/api/hello")
     fun hello(@RequestParam(value = "name", defaultValue = "World") name: String): String {
         return "Hello $name"
     }
 
-    @PostMapping("/swaggerValidation")
+    @PostMapping("/api/swaggerValidation")
     fun validate(@RequestParam(value = "swaggerUrl") url: String,
                  @RequestParam(value = "path") path: String,
                  @RequestParam(value = "request") request: String,
