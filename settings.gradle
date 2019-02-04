@@ -1,2 +1,3 @@
 rootProject.name = 'swagger-validator'
 
+include 'swagger-validator-ui'
