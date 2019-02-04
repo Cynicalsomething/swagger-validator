@@ -17,13 +17,9 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation(project(":swagger-validator-ui"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.atlassian.oai:swagger-request-validator-core:2.1.0")
-}
-
-tasks.getByName<BootJar>("bootJar") {
-    dependsOn(":swagger-validator-ui:npm_run_build")
-    from("swagger-validator-ui/dist/swagger-validator-ui").into("static")
 }
 
 
