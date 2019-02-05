@@ -22,7 +22,6 @@ dependencies {
     implementation("com.atlassian.oai:swagger-request-validator-core:2.1.0")
 }
 
-
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }

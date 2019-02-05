@@ -1,6 +1,8 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
-  id("java")
   id("com.moowork.node") version "1.2.0"
+  id("java")
 }
 
 node {
@@ -9,7 +11,13 @@ node {
   download = true
 }
 
-tasks.getByName<Jar>("jar") {
-  dependsOn("npm_run_build")
-  from("dist/swagger-validator-ui").into("static")
+tasks {
+  jar {
+    dependsOn("npm_run_build")
+    from("dist/${project.name}").into("static")
+  }
 }
+
+
+
+
