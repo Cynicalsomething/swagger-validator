@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 plugins {
     kotlin("jvm") version "1.3.20"
     id("org.springframework.boot") version "2.1.2.RELEASE"
@@ -22,10 +19,12 @@ dependencies {
     implementation("com.atlassian.oai:swagger-request-validator-core:2.1.0")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
-tasks.withType<Wrapper> {
-    gradleVersion = "5.1.1"
+tasks {
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    
+    wrapper {
+        gradleVersion = "5.1.1"
+    }
 }

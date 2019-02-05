@@ -4,8 +4,10 @@ import com.atlassian.oai.validator.OpenApiInteractionValidator
 import com.atlassian.oai.validator.model.SimpleRequest
 import com.atlassian.oai.validator.model.SimpleResponse
 import com.atlassian.oai.validator.report.SimpleValidationReportFormat
+import com.fasterxml.jackson.annotation.JsonCreator
 import io.swagger.parser.OpenAPIParser
 import io.swagger.v3.parser.core.models.ParseOptions
+import io.swagger.v3.parser.core.models.SwaggerParseResult
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.web.bind.annotation.*
@@ -18,18 +20,28 @@ fun main(args: Array<String>) {
 }
 
 @RestController
+@RequestMapping("/api")
 class HelloController {
 
-    @GetMapping("/api/hello")
-    fun hello(@RequestParam(value = "name", defaultValue = "World") name: String): String {
+    @GetMapping("/hello")
+    fun hello(@RequestParam("name", defaultValue = "World") name: String): String {
         return "Hello $name"
     }
 
-    @PostMapping("/api/swaggerValidation")
-    fun validate(@RequestParam(value = "swaggerUrl") url: String,
-                 @RequestParam(value = "path") path: String,
-                 @RequestParam(value = "request") request: String,
-                 @RequestParam(value = "response") response: String): String {
+    @PostMapping("/parseSwagger")
+    fun parseSwagger(@RequestBody req: ParseRequest): SwaggerParseResult {
+        return OpenAPIParser().readLocation(req.url, null, ParseOptions().apply {
+            isResolve = true
+            isResolveFully = true
+            isResolveCombinators = false
+        })
+    }
+
+    @PostMapping("/swaggerValidation")
+    fun validate(@RequestParam("swaggerUrl") url: String,
+                 @RequestParam("path") path: String,
+                 @RequestParam("request") request: String,
+                 @RequestParam("response") response: String): String {
 
         val parser = OpenAPIParser().readLocation(url, null, ParseOptions().apply {
             isResolve = true
@@ -49,3 +61,4 @@ class HelloController {
     }
 }
 
+data class ParseRequest @JsonCreator constructor(val url: String)

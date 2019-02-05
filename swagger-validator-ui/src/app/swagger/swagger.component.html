@@ -1,3 +1,27 @@
 <p>
-  swagger works!
+  <mat-vertical-stepper linear>
+    <mat-step [stepControl]="form1">
+      <form [formGroup]="form1">
+
+        <div>
+          <ng-template matStepLabel>Load Swagger</ng-template>
+          <mat-form-field>
+            <input matInput type="url" placeholder="Swagger URL" formControlName="swaggerUrl" required>
+          </mat-form-field>
+          <button mat-stroked-button matStepperNext (click)="test()">Next</button>
+        </div>
+
+        <div [hidden]="!showSwaggerLoad">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step label="Step 2">
+      Content 2
+      <div>
+        <button mat-stroked-button matStepperPrevious>Back</button>
+        <button mat-stroked-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
 </p>

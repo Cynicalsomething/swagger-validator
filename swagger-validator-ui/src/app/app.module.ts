@@ -4,6 +4,15 @@ import { HttpClientModule } from "@angular/common/http";
 
 import { AppComponent } from './app.component';
 import { SwaggerComponent } from './swagger/swagger.component';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  MatStepperModule,
+  MatProgressBarModule,
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule
+} from "@angular/material";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -12,7 +21,15 @@ import { SwaggerComponent } from './swagger/swagger.component';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatStepperModule,
+    MatProgressBarModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

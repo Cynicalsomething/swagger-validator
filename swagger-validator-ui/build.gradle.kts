@@ -1,5 +1,3 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 plugins {
   id("com.moowork.node") version "1.2.0"
   id("java")
