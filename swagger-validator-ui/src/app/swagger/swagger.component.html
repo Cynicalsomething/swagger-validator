@@ -1,26 +1,32 @@
 <p>
-  <mat-vertical-stepper linear>
-    <mat-step [stepControl]="form1">
-      <form [formGroup]="form1">
-
-        <div>
-          <ng-template matStepLabel>Load Swagger</ng-template>
-          <mat-form-field>
-            <input matInput type="url" placeholder="Swagger URL" formControlName="swaggerUrl" required>
-          </mat-form-field>
-          <button mat-stroked-button matStepperNext (click)="test()">Next</button>
-        </div>
-
-        <div [hidden]="!showSwaggerLoad">
-          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step label="Step 2">
-      Content 2
+  <mat-vertical-stepper linear #stepper>
+    <mat-step [completed]="step1Completed()">
+      <ng-template matStepLabel>Load Swagger</ng-template>
       <div>
-        <button mat-stroked-button matStepperPrevious>Back</button>
-        <button mat-stroked-button matStepperNext>Next</button>
+        <mat-form-field>
+          <input #url matInput type="url" placeholder="Swagger URL" required>
+          <mat-spinner matSuffix *ngIf="swaggerLoading" mode="indeterminate" diameter="20"></mat-spinner>
+        </mat-form-field>
+        <button mat-stroked-button matSuffix (click)="parseSwagger(url.value, stepper)">Load</button>
+        <div style="color: red">{{parseResult != null ? parseResult.errors : ""}}</div>
+      </div>
+
+      <div>
+        <button mat-stroked-button matStepperNext *ngIf="step1Completed()">Next</button>
+      </div>
+
+    </mat-step>
+
+    <mat-step [completed]="step2Complete()">
+      <ng-template matStepLabel>Choose Path</ng-template>
+      <div>
+        <mat-form-field *ngIf="parseResult != null">
+          <mat-select placeholder="Path">
+            <mat-option *ngFor="let p of parseResult.paths" [value]="p.path" (onSelectionChange)="setSelectedPath(pathOpt)" #pathOpt>
+              {{p.path}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </mat-step>
   </mat-vertical-stepper>

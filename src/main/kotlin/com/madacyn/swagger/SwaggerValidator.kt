@@ -6,8 +6,8 @@ import com.atlassian.oai.validator.model.SimpleResponse
 import com.atlassian.oai.validator.report.SimpleValidationReportFormat
 import com.fasterxml.jackson.annotation.JsonCreator
 import io.swagger.parser.OpenAPIParser
+import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.parser.core.models.ParseOptions
-import io.swagger.v3.parser.core.models.SwaggerParseResult
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.web.bind.annotation.*
@@ -29,12 +29,22 @@ class HelloController {
     }
 
     @PostMapping("/parseSwagger")
-    fun parseSwagger(@RequestBody req: ParseRequest): SwaggerParseResult {
-        return OpenAPIParser().readLocation(req.url, null, ParseOptions().apply {
+    fun parseSwagger(@RequestBody req: ParseRequest): ParseResult {
+        val result = OpenAPIParser().readLocation(req.url, null, ParseOptions().apply {
             isResolve = true
             isResolveFully = true
             isResolveCombinators = false
         })
+
+        if(!result.messages.isEmpty()) {
+            return ParseResult(req.url, emptyList(), result.messages)
+        }
+
+        val paths = result.openAPI.paths.map { path ->
+            Path(path.key, path.value.readOperationsMap().map { it.key })
+        }
+
+        return ParseResult(req.url, paths, result.messages)
     }
 
     @PostMapping("/swaggerValidation")
@@ -62,3 +72,5 @@ class HelloController {
 }
 
 data class ParseRequest @JsonCreator constructor(val url: String)
+data class Path(val path: String, val methods: List<PathItem.HttpMethod>)
+data class ParseResult(val url: String, val paths: List<Path>, val errors: List<String>)

@@ -1,6 +1,7 @@
 import {Component, Injectable, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
+import {ParseResult} from "./ParseResult";
+import {MatOption, MatStepper} from "@angular/material";
 
 @Component({
   selector: 'app-swagger',
@@ -10,24 +11,34 @@ import {HttpClient} from "@angular/common/http";
 @Injectable()
 export class SwaggerComponent implements OnInit {
 
-  showSwaggerLoad: boolean = false;
+  swaggerLoading: boolean = false;
+  parseResult: ParseResult;
+  selectedPath: string = '';
 
-  form1: FormGroup;
+  constructor(private http: HttpClient) { }
 
-  constructor(private _formBuilder: FormBuilder, private http: HttpClient) { }
+  ngOnInit() {}
 
-  ngOnInit() {
-    this.form1 = this._formBuilder.group({
-      swaggerUrl: ['', Validators.required]
-    })
+  parseSwagger(url: string, stepper: MatStepper) {
+    this.swaggerLoading = true;
+    this.http.post<ParseResult>('/api/parseSwagger', {url: url}).subscribe(res => {
+      this.parseResult = res;
+      this.swaggerLoading = false;
+    },
+    error => {
+      console.log(error)
+    });
   }
 
-  get swaggerUrl(): any { return this.form1.get('swaggerUrl').value }
+  setSelectedPath(pathOpt: MatOption) {
+    this.selectedPath = pathOpt.value
+  }
 
-  test() {
-    this.showSwaggerLoad = true;
-    this.http.post('/api/parseSwagger', {url: this.swaggerUrl}, {responseType: 'json'}).subscribe(res => {
-      console.log(res["openAPI"]["paths"])
-    });
+  step1Completed() : boolean {
+    return this.parseResult != null && this.parseResult.errors.length == 0
+  }
+
+  step2Complete(): boolean {
+    return this.selectedPath != ''
   }
 }
