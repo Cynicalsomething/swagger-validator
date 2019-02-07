@@ -23,11 +23,6 @@ fun main(args: Array<String>) {
 @RequestMapping("/api")
 class HelloController {
 
-    @GetMapping("/hello")
-    fun hello(@RequestParam("name", defaultValue = "World") name: String): String {
-        return "Hello $name"
-    }
-
     @PostMapping("/parseSwagger")
     fun parseSwagger(@RequestBody req: ParseRequest): ParseResult {
         val result = OpenAPIParser().readLocation(req.url, null, ParseOptions().apply {
@@ -48,24 +43,13 @@ class HelloController {
     }
 
     @PostMapping("/swaggerValidation")
-    fun validate(@RequestParam("swaggerUrl") url: String,
-                 @RequestParam("path") path: String,
-                 @RequestParam("request") request: String,
-                 @RequestParam("response") response: String): String {
+    fun validate(@RequestBody req: ValidateRequest): String {
 
-        val parser = OpenAPIParser().readLocation(url, null, ParseOptions().apply {
-            isResolve = true
-            isResolveFully = true
-            isResolveCombinators = false
-        })
+        val api = OpenApiInteractionValidator.createFor(req.swaggerUrl).build()
+        val request = SimpleRequest.Builder.post(req.path).withContentType("application/json").withBody(req.request).build()
+        val res = SimpleResponse.Builder.ok().withContentType("application/json").withBody(req.response).build()
 
-        parser.openAPI.paths.keys.forEach { println(it) }
-
-        val api = OpenApiInteractionValidator.createFor(url).build()
-        val req = SimpleRequest.Builder.post(path).withContentType("application/json").withBody(request).build()
-        val res = SimpleResponse.Builder.ok().withContentType("application/json").withBody(response).build()
-
-        val report = api.validate(req, res)
+        val report = api.validate(request, res)
 
         return SimpleValidationReportFormat.getInstance().apply(report)
     }
@@ -74,3 +58,4 @@ class HelloController {
 data class ParseRequest @JsonCreator constructor(val url: String)
 data class Path(val path: String, val methods: List<PathItem.HttpMethod>)
 data class ParseResult(val url: String, val paths: List<Path>, val errors: List<String>)
+data class ValidateRequest @JsonCreator constructor(val swaggerUrl: String, val method: String, val path: String, val request: String, val response: String)
