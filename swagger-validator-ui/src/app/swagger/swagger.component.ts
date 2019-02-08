@@ -1,9 +1,7 @@
-import {Component, Injectable, OnInit} from '@angular/core';
+import {Component, Injectable, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ParseResult} from "./ParseResult";
-import {MatOption, MatStepper} from "@angular/material";
 import {Path} from "./Path";
-import {ValidateResult} from "./ValidateResult";
 import {ValidateRequest} from "./ValidateRequest";
 
 @Component({
@@ -42,7 +40,7 @@ export class SwaggerComponent implements OnInit {
   validateSwagger(url: string) {
     this.validating = true;
 
-    let request = new ValidateRequest(url, this.selectedMethod, this.selectedPath.path, this.requestJson, this.responseJson);
+    let request = new ValidateRequest(url, this.selectedMethod, this.selectedPath.path, this.requestJson, new Map<string, string>(), this.responseJson);
 
     this.http.post('/api/swaggerValidation', request, {responseType: 'text'}).subscribe(res => {
         this.validationMessages = res;
@@ -63,10 +61,14 @@ export class SwaggerComponent implements OnInit {
   }
 
   step3Complete(): boolean {
-    return this.requestJson != null;
+    return this.requestJson != null || this.selectedMethod == 'GET';
   }
 
   step4Complete(): boolean {
     return this.responseJson != null;
+  }
+
+  isGETMethodSelected(): boolean {
+    return this.selectedMethod == 'GET'
   }
 }

@@ -4,7 +4,7 @@
       <ng-template matStepLabel>Load Swagger</ng-template>
       <div>
         <mat-form-field style="width: 30em">
-          <input #url matInput type="url" placeholder="Swagger URL" required>
+          <input #url matInput type="url" placeholder="Swagger URL" value="https://petstore.swagger.io/v2/swagger.json" required>
           <mat-spinner matSuffix *ngIf="swaggerLoading" mode="indeterminate" diameter="20"></mat-spinner>
         </mat-form-field>
         <button mat-stroked-button matSuffix (click)="parseSwagger(url.value)">Load</button>
@@ -43,11 +43,15 @@
     </mat-step>
 
     <mat-step [completed]="step3Complete()">
-      <ng-template matStepLabel>Request JSON</ng-template>
-      <div>
+      <ng-template matStepLabel>Request</ng-template>
+      <div *ngIf="!isGETMethodSelected()">
         <mat-form-field>
           <textarea matInput cdkTextareaAutosize placeholder="Request JSON" [(ngModel)]="requestJson"></textarea>
         </mat-form-field>
+      </div>
+
+      <div *ngIf="isGETMethodSelected()">
+        <app-pair-table #pair></app-pair-table>
       </div>
 
       <div>

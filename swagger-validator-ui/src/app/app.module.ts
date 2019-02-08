@@ -12,14 +12,17 @@ import {
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatSelectModule,
-  MatStepperModule
+  MatStepperModule,
+  MatTableModule
 } from "@angular/material";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {PairTableComponent} from './pair-table/pair-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SwaggerComponent
+    SwaggerComponent,
+    PairTableComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     FormsModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
