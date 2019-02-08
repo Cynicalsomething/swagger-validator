@@ -12,6 +12,8 @@ import {ValidateRequest} from "./ValidateRequest";
 @Injectable()
 export class SwaggerComponent implements OnInit {
 
+  @ViewChild('pair') pair;
+
   swaggerLoading: boolean = false;
   parseResult: ParseResult;
   selectedPath: Path;

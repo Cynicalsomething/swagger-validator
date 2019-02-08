@@ -1,0 +1,42 @@
+<table mat-table [dataSource]="pairs | keyvalue" class="mat-elevation-z1">
+  <!--Keys-->
+  <ng-container matColumnDef="keys">
+    <mat-header-cell *matHeaderCellDef>Keys</mat-header-cell>
+    <mat-cell *matCellDef="let item">{{item.key}}</mat-cell>
+    <td mat-footer-cell *matFooterCellDef>
+      <mat-form-field>
+        <input matInput type="text" placeholder="key" #keyInput>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <!--Values-->
+  <ng-container matColumnDef="values">
+    <mat-header-cell *matHeaderCellDef>Values</mat-header-cell>
+    <mat-cell *matCellDef="let item">{{item.value}}</mat-cell>
+    <td mat-footer-cell *matFooterCellDef>
+      <mat-form-field>
+        <input matInput type="text" placeholder="value" #valueInput>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <!--Operation-->
+  <ng-container matColumnDef="ops">
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let item">
+      <button mat-icon-button color="warn" (click)="removeParam(item)">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-cell>
+    <td mat-footer-cell *matFooterCellDef>
+      <button mat-icon-button color="primary" (click)="addParam()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayColumns;"></mat-row>
+  <mat-footer-row *matFooterRowDef="displayColumns"></mat-footer-row>
+</table>

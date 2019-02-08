@@ -7,7 +7,7 @@ import {SwaggerComponent} from './swagger/swagger.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {
   MatButtonModule,
-  MatFormFieldModule,
+  MatFormFieldModule, MatIconModule,
   MatInputModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
@@ -37,7 +37,8 @@ import {PairTableComponent} from './pair-table/pair-table.component';
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
