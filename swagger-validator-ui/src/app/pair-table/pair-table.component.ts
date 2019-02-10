@@ -1,5 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatInput, MatTableDataSource} from "@angular/material";
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-pair-table',
@@ -18,22 +17,23 @@ export class PairTableComponent implements OnInit {
     ['qwer', 'rewq']
   ]);
 
+  @Output() paramEvent = new EventEmitter<Map<string, string>>();
+
   constructor() { }
 
   ngOnInit() {
+    this.paramEvent.emit(this.pairs);
   }
 
   addParam() {
     this.pairs.set(this.keyInput.nativeElement.value, this.valueInput.nativeElement.value);
     this.keyInput.nativeElement.value = '';
     this.valueInput.nativeElement.value = '';
+    this.paramEvent.emit(this.pairs);
   }
 
   removeParam(item: any) {
     this.pairs.delete(item.key)
-  }
-
-  getParams(): Map<string, string> {
-    return this.pairs;
+    this.paramEvent.emit(this.pairs);
   }
 }

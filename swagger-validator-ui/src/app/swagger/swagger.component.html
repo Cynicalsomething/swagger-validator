@@ -19,7 +19,7 @@
 
     <mat-step [completed]="step2Complete()">
       <ng-template matStepLabel>Choose Path</ng-template>
-      <div>
+      <div style="width: 50%">
         <mat-form-field>
           <mat-select placeholder="Path" [(ngModel)]="selectedPath">
             <mat-option *ngFor="let p of parseResult?.paths" [value]="p">
@@ -51,7 +51,7 @@
       </div>
 
       <div *ngIf="isGETMethodSelected()">
-        <app-pair-table #pair></app-pair-table>
+        <app-pair-table (paramEvent)="paramChanged($event)"></app-pair-table>
       </div>
 
       <div>

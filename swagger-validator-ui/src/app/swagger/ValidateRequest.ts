@@ -3,10 +3,10 @@ export class ValidateRequest {
   method: string;
   path: string;
   request: string;
-  queryParams: Map<string, string>;
+  queryParams: {};
   response: string;
 
-  constructor(url: string, method: string, path: string, requestJson: string, queryParams: Map<string, string>, responseJson: string) {
+  constructor(url: string, method: string, path: string, requestJson: string, queryParams: {}, responseJson: string) {
     this.swaggerUrl = url;
     this.method = method;
     this.path = path;

@@ -18,6 +18,7 @@ export class SwaggerComponent implements OnInit {
   parseResult: ParseResult;
   selectedPath: Path;
   selectedMethod: string;
+  queryParams: Map<string, string>;
   requestJson: string;
   responseJson: string;
 
@@ -42,7 +43,11 @@ export class SwaggerComponent implements OnInit {
   validateSwagger(url: string) {
     this.validating = true;
 
-    let request = new ValidateRequest(url, this.selectedMethod, this.selectedPath.path, this.requestJson, new Map<string, string>(), this.responseJson);
+    const convMap = {};
+    this.queryParams.forEach((value: string, key: string) => {
+      convMap[key] = value;
+    });
+    let request = new ValidateRequest(url, this.selectedMethod, this.selectedPath.path, this.requestJson, convMap, this.responseJson);
 
     this.http.post('/api/swaggerValidation', request, {responseType: 'text'}).subscribe(res => {
         this.validationMessages = res;
@@ -52,6 +57,10 @@ export class SwaggerComponent implements OnInit {
         console.log(error)
       }
     )
+  }
+
+  paramChanged(params: Map<string, string>) {
+    this.queryParams = params;
   }
 
   step1Completed() : boolean {

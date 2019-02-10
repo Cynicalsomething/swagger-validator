@@ -46,7 +46,7 @@ class HelloController {
         return ParseResult(req.url, paths, result.messages)
     }
 
-    final val jsonType = MediaType.JSON_UTF_8.type()
+    private final val jsonType = MediaType.JSON_UTF_8.type()
 
     @PostMapping("/swaggerValidation")
     fun validate(@RequestBody req: ValidateRequest): String {
