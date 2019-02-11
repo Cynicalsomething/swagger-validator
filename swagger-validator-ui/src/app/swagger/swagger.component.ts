@@ -25,28 +25,33 @@ export class SwaggerComponent implements OnInit {
   validating: boolean = false;
   validationMessages: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   parseSwagger(url: string) {
     this.swaggerLoading = true;
     this.http.post<ParseResult>('/api/parseSwagger', {url: url}).subscribe(res => {
-      this.parseResult = res;
-      this.swaggerLoading = false;
-    },
-    error => {
-      console.log(error)
-    });
+        this.parseResult = res;
+        this.swaggerLoading = false;
+      },
+      error => {
+        console.log(error)
+      });
   }
 
   validateSwagger(url: string) {
     this.validating = true;
 
     const convMap = {};
-    this.queryParams.forEach((value: string, key: string) => {
-      convMap[key] = value;
-    });
+    if (this.queryParams) {
+      this.queryParams.forEach((value: string, key: string) => {
+        convMap[key] = value;
+      });
+    }
+
     let request = new ValidateRequest(url, this.selectedMethod, this.selectedPath.path, this.requestJson, convMap, this.responseJson);
 
     this.http.post('/api/swaggerValidation', request, {responseType: 'text'}).subscribe(res => {
@@ -63,7 +68,7 @@ export class SwaggerComponent implements OnInit {
     this.queryParams = params;
   }
 
-  step1Completed() : boolean {
+  step1Completed(): boolean {
     return this.parseResult != null && this.parseResult.errors.length == 0;
   }
 

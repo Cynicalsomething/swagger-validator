@@ -5,12 +5,12 @@ import com.atlassian.oai.validator.model.SimpleRequest
 import com.atlassian.oai.validator.model.SimpleResponse
 import com.atlassian.oai.validator.report.SimpleValidationReportFormat
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.google.common.net.MediaType
 import io.swagger.parser.OpenAPIParser
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.parser.core.models.ParseOptions
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -46,7 +46,7 @@ class HelloController {
         return ParseResult(req.url, paths, result.messages)
     }
 
-    private final val jsonType = MediaType.JSON_UTF_8.type()
+    private final val jsonType = MediaType.APPLICATION_JSON
 
     @PostMapping("/swaggerValidation")
     fun validate(@RequestBody req: ValidateRequest): String {
@@ -59,8 +59,8 @@ class HelloController {
                     builder.withQueryParam(entry.key, entry.value)
                 }
             }.build()
-            "POST" -> SimpleRequest.Builder.post(req.path).withContentType(jsonType).withBody(req.request).build()
-            "PUT" -> SimpleRequest.Builder.put(req.path).withContentType(jsonType).withBody(req.request).build()
+            "POST" -> SimpleRequest.Builder.post(req.path).withContentType(jsonType.toString()).withBody(req.request).build()
+            "PUT" -> SimpleRequest.Builder.put(req.path).withContentType(jsonType.toString()).withBody(req.request).build()
             else -> throw IllegalArgumentException("${req.method} Not supported")
         }
 
