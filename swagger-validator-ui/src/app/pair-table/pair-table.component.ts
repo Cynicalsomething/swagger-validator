@@ -12,10 +12,7 @@ export class PairTableComponent implements OnInit {
   @ViewChild('keyInput') keyInput;
   @ViewChild('valueInput') valueInput;
 
-  pairs = new Map([
-    ['asdf', 'fdsa'],
-    ['qwer', 'rewq']
-  ]);
+  pairs = new Map<string, string>([]);
 
   @Output() paramEvent = new EventEmitter<Map<string, string>>();
 
